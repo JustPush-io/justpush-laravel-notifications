@@ -1,0 +1,28 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { php: "8.2", laravel: "12.*" }
+          - { php: "8.3", laravel: "13.*" }
+          - { php: "8.4", laravel: "13.*" }
+          - { php: "8.5", laravel: "13.*" }
+    name: PHP ${{ matrix.php }} / Laravel ${{ matrix.laravel }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php: ${{ matrix.php }}
+          coverage: none
+      - run: composer require --no-interaction --no-update "illuminate/notifications:${{ matrix.laravel }}" "illuminate/support:${{ matrix.laravel }}"
+      - run: composer update --no-interaction --prefer-dist
+      - run: vendor/bin/phpunit

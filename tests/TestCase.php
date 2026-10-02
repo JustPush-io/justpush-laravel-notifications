@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace NotificationChannels\JustPush\Tests;
+
+use NotificationChannels\JustPush\JustPushServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
+
+abstract class TestCase extends Orchestra
+{
+    protected function getPackageProviders($app): array
+    {
+        return [JustPushServiceProvider::class];
+    }
+}
